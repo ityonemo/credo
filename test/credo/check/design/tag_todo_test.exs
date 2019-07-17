@@ -66,6 +66,16 @@ defmodule Credo.Check.Design.TagTODOTest do
     |> refute_issues(@described_check)
   end
 
+  test "it should NOT report a comment with a custom pattern" do
+    """
+    defmodule CredoSampleModule do
+      # (#54) TODO: adjust the flux capacitor properly
+    end
+    """
+    |> to_source_file
+    |> refute_issues(@described_check)
+  end
+
   #
   # cases raising issues
   #
@@ -84,6 +94,16 @@ defmodule Credo.Check.Design.TagTODOTest do
     """
     |> to_source_file
     |> assert_issue(@described_check)
+  end
+
+  test "it should report a comment with a custom pattern if the pattern is defined" do
+    """
+    defmodule CredoSampleModule do
+      # (#54) TODO: adjust the flux capacitor properly
+    end
+    """
+    |> to_source_file
+    |> assert_issue(@described_check, pattern: ~S"\s*\(#\d+\)\s+TODO\:.+")
   end
 
   test "it should report an issue for @doc tags" do

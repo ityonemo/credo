@@ -1,4 +1,6 @@
 defmodule Credo.Check.Design.TagHelperTest do
+  @todo_pattern ~S"\s*TODO:?\s*"
+
   use Credo.TestHelper
 
   alias Credo.Check.Design.TagHelper
@@ -15,7 +17,7 @@ defmodule Credo.Check.Design.TagHelperTest do
       end
       """
       |> to_source_file
-      |> TagHelper.tags(:TODO, true)
+      |> TagHelper.tags(@todo_pattern, true)
 
     assert [] == tags
   end
@@ -32,7 +34,7 @@ defmodule Credo.Check.Design.TagHelperTest do
       end
       """
       |> to_source_file
-      |> TagHelper.tags(:TODO, true)
+      |> TagHelper.tags(@todo_pattern, true)
 
     expected = [
       {
@@ -57,7 +59,7 @@ defmodule Credo.Check.Design.TagHelperTest do
       end
       """
       |> to_source_file
-      |> TagHelper.tags(:TODO, true)
+      |> TagHelper.tags(@todo_pattern, true)
 
     expected = [
       {
@@ -83,7 +85,7 @@ defmodule Credo.Check.Design.TagHelperTest do
       end
       """
       |> to_source_file
-      |> TagHelper.tags(:TODO, true)
+      |> TagHelper.tags(@todo_pattern, true)
 
     expected = [
       {
@@ -117,7 +119,7 @@ defmodule Credo.Check.Design.TagHelperTest do
       end
       """
       |> to_source_file
-      |> TagHelper.tags(:TODO, true)
+      |> TagHelper.tags(@todo_pattern, true)
 
     assert 3 == Enum.count(tags)
   end

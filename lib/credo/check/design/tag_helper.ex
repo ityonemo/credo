@@ -5,23 +5,23 @@ defmodule Credo.Check.Design.TagHelper do
 
   alias Credo.SourceFile
 
-  def tags(source_file, tag_name, include_doc?) do
-    tags_from_module_attributes(source_file, tag_name, include_doc?) ++
-      tags_from_comments(source_file, tag_name)
+  def tags(source_file, tag_pattern, include_doc?) do
+    tags_from_module_attributes(source_file, tag_pattern, include_doc?) ++
+      tags_from_comments(source_file, tag_pattern)
   end
 
-  defp tags_from_module_attributes(source_file, tag_name, true) do
-    regex = Regex.compile!("\\A\\s*#{tag_name}:?\\s*.+", "i")
+  defp tags_from_module_attributes(source_file, tag_pattern, true) do
+    regex = Regex.compile!("\\A#{tag_pattern}.+", "i")
 
     Credo.Code.prewalk(source_file, &traverse(&1, &2, regex))
   end
 
-  defp tags_from_module_attributes(_source_file, _tag_name, false) do
+  defp tags_from_module_attributes(_source_file, _tag_pattern, false) do
     []
   end
 
-  defp tags_from_comments(source_file, tag_name) do
-    regex = Regex.compile!("(\\A|[^\\?])#\\s*#{tag_name}:?\\s*.+", "i")
+  defp tags_from_comments(source_file, tag_pattern) do
+    regex = Regex.compile!("(\\A|[^\\?])##{tag_pattern}.+", "i")
     source = SourceFile.source(source_file)
 
     if source =~ regex do

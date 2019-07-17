@@ -23,7 +23,7 @@ defmodule Credo.Check.Design.TagTODO do
       include_doc: "Set to `true` to also include tags from @doc attributes."
     ]
   ]
-  @default_params [include_doc: true]
+  @default_params [include_doc: true, pattern: ~S"\s*TODO:?\s*"]
   @tag_name "TODO"
 
   use Credo.Check
@@ -34,9 +34,10 @@ defmodule Credo.Check.Design.TagTODO do
   def run(source_file, params \\ []) do
     issue_meta = IssueMeta.for(source_file, params)
     include_doc? = Params.get(params, :include_doc, @default_params)
+    pattern = Params.get(params, :pattern, @default_params)
 
     source_file
-    |> TagHelper.tags(@tag_name, include_doc?)
+    |> TagHelper.tags(pattern, include_doc?)
     |> Enum.map(&issue_for(issue_meta, &1))
   end
 
